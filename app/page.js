@@ -1,94 +1,98 @@
+"use client"
 import Image from "next/image";
 import styles from "./page.module.css";
+import Logo from "../public/logo.png"
+import { useEffect, useState } from "react";
+import * as http from './http-request'
+import { downloadBase64Image } from './lib/utils'
+import { useRouter } from "next/navigation";
+import ResponsiveAppBar from "./navbar/navbar";
+//import { Loader } from 'react-loader-spinner';
+
+const GenerationStyles = [
+  "3d-model", "analog-film", "anime", "cinematic", "comic-book", "digital-art", "enhance", "fantasy-art", "isometric", "line-art", "low-poly", "modeling-compound", "neon-punk", "origami", "photographic", "pixel-art", "tile-texture"
+];
 
 export default function Home() {
+  const [images, addImage] = useState([]);
+  const [inputText, setInputText] = useState('');
+  const [selectedOption, setSelectedOption] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const router = useRouter();
+  
+  const handleChangeStyle = (event) => {
+    if (event.target.value === 'Select') {
+      setSelectedOption('');
+    } else {
+      setSelectedOption(event.target.value);
+    }
+  };
+
+  const handleChange = (event) => {
+    setInputText(event.target.value);
+  }
+
+  const handleClick = async () => {
+    
+    try {
+      setIsLoading(true);
+      setIsDisabled(true);
+      const response = await http.generate(inputText, selectedOption);
+      const data = response?.data?.artifacts ?? [];
+      addImage([...data]);
+
+    } catch (error) {
+      console.error('Error generating data:', error);
+
+    } finally {
+      setIsLoading(false);
+      setIsDisabled(false)
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+    if (!token) {
+      router.push("/login")
+    }
+  }, []);
+
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+      <ResponsiveAppBar />
+      <div className={styles.content}>
+        <div className={styles.imageGrid}>
+          {images.map((item, index) => {
+            return (
+              <div key={index}>
+                <Image className={styles.img} src={`data:image/png;base64,${item.base64}`} width={200} height={200} alt="img"/>
+                <button
+                  onClick={() => downloadBase64Image(`data:image/png;base64,${item.base64}`, 'a.png')} 
+                >
+                  Download
+                </button>
+              </div>
+            )
+          })}
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+        <div className={styles.inputRow}>
+          <select value={selectedOption} onChange={handleChangeStyle}>
+            {GenerationStyles.map((style, index) => (
+              <option key={index} value={style}>{style}</option>
+            ))}
+          </select>
+          <input onChange={handleChange} type="text" className={styles.search} placeholder="Describe what you want to see" />
+          <div className={styles.btn} onClick={handleClick} disabled={isDisabled}>
+            {isLoading ? (
+              <div className={styles.loaderContainer}>
+                <div className={styles.loader}></div>
+              </div>
+              ) : (
+                "Generate"
+            )}
+          </div>
+        </div>  
       </div>
     </main>
   );
