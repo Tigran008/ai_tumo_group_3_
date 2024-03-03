@@ -1,0 +1,79 @@
+/* components/Modal.module.css */
+
+.modalOverlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+.modalContent {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  color: red;
+}
+
+.modalOverlay.open {
+  display: flex;
+}
+
+.inputLabel {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 18px;
+  color: #333;
+}
+
+.nameInput, .selects {
+  width: 300px;
+  padding: 10px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+.fileNames {
+  background-color: #f8f8f8;
+}
+
+.downloadBtn {
+  box-shadow: 1px 1px 5px 0px;
+  cursor: pointer;
+  border: none;
+  width: 30%;
+  height: 30px;
+  background-color: #86B6F6;
+  display: block;
+}
+
+.text {
+  display: none;
+}
+
+.empty {
+  color:red;
+  display: block;
+  font-size: smaller;
+  margin-bottom: 15px;
+}
+
+  

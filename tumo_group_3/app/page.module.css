@@ -1,0 +1,140 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  align-items: center;
+  gap: 20px;
+  background-color: #B4D4FF;
+  height: 100vh;
+}
+
+
+.header{
+  display: flex;
+  background-color:#1F3540 ;
+  height: 100px;
+  width: 100%;
+}
+
+.header p{
+  margin: auto;
+  font-size: 30px;
+}
+
+
+.logo{
+  width: 60px;
+  height: 60px;
+  margin: 16px;
+}
+
+.content{
+  width: 60%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.imageGrid{
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+
+  margin-bottom: 60px;
+
+}
+
+.img{
+
+  width: 350px;
+  height: 350px;
+  padding: 1%;
+  border-radius: 8px;
+
+}
+
+.inputRow {
+  width: 100%;
+  display: flex;
+  height: 70px;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 50px;
+  background: #EEF5FF;
+  margin-top: 50px;
+}
+
+.focusedInputRow {
+  border-color: #3498db;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.7);
+}
+
+
+.search{
+  width: 90%;
+  height: 50px;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  color: black;
+  padding-left: 35px;
+  margin-right: 35px;
+}
+
+
+.search::placeholder{
+  color: #999;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+  height: 75px;
+  font-size: 20px;
+  border-radius: 50px;
+  background: #176B87;
+  cursor: pointer;
+  border: none;
+}
+
+.btn:disabled {
+  background: #a8afb8;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .inputRow {
+    display: block;
+  }
+
+  .btn {
+    margin-top: 30px;
+    width: 100%;
+  }
+}
+
+/* Add your own styles for loader container */
+.loader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* Loader animation styles */
+.loader {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
